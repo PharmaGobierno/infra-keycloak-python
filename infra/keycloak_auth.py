@@ -7,9 +7,9 @@ class KeycloakAuthService:
     def __init__(self, config: dict = {}):
         self.openid = KeycloakOpenID(
             server_url=config["KEYCLOAK_URL"] or getenv("KEYCLOAK_URL"),
-            client_id=config["CLIENT_ID"] or getenv("CLIENT_ID", "admin-cli"),
-            realm_name=config["REALM_NAME"] or getenv("REALM_NAME", "master"),
-            client_secret_key=config["CLIENT_SECRET"] or getenv("CLIENT_SECRET"),
+            client_id=config["KEYCLOAK_CLIENT_ID"] or getenv("KEYCLOAK_CLIENT_ID", "admin-cli"),
+            realm_name=config["KEYCLOAK_REALM"] or getenv("KEYCLOAK_REALM", "master"),
+            client_secret_key=config["KEYCLOAK_CLIENT_SECRET"] or getenv("KEYCLOAK_CLIENT_SECRET"),
             verify=True,
         )
 
