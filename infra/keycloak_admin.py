@@ -8,11 +8,11 @@ class KeycloakAdminService:
     def __init__(self, config: dict = {}):
 
         self.admin = KeycloakAdmin(
-            server_url=config["KEYCLOAK_URL"] or getenv("KEYCLOAK_URL"),
-            username=config["ADMIN_USERNAME"] or getenv("ADMIN_USERNAME"),
-            password=config["ADMIN_PASSWORD"] or getenv("ADMIN_PASSWORD"),
-            realm_name=config["REALM_NAME"] or getenv("REALM_NAME", "master"),
-            user_realm_name=config["ADMIN_REALM"] or getenv("ADMIN_REALM"),
+            server_url=config.get("KEYCLOAK_URL") or getenv("KEYCLOAK_URL"),
+            username=config.get("ADMIN_USERNAME") or getenv("ADMIN_USERNAME"),
+            password=config.get("ADMIN_PASSWORD") or getenv("ADMIN_PASSWORD"),
+            realm_name=config.get("REALM_NAME") or getenv("REALM_NAME", "master"),
+            user_realm_name=config.get("ADMIN_REALM") or getenv("ADMIN_REALM"),
             client_id=config.get("CLIENT_ID") or getenv("CLIENT_ID", "admin-cli"),
             verify=True,
         )

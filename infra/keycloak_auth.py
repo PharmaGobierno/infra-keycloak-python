@@ -6,10 +6,13 @@ from keycloak import KeycloakOpenID
 class KeycloakAuthService:
     def __init__(self, config: dict = {}):
         self.openid = KeycloakOpenID(
-            server_url=config["KEYCLOAK_URL"] or getenv("KEYCLOAK_URL"),
-            client_id=config["KEYCLOAK_CLIENT_ID"] or getenv("KEYCLOAK_CLIENT_ID", "admin-cli"),
-            realm_name=config["KEYCLOAK_REALM"] or getenv("KEYCLOAK_REALM", "master"),
-            client_secret_key=config["KEYCLOAK_CLIENT_SECRET"] or getenv("KEYCLOAK_CLIENT_SECRET"),
+            server_url=config.get("KEYCLOAK_URL") or getenv("KEYCLOAK_URL"),
+            client_id=config.get("KEYCLOAK_CLIENT_ID")
+            or getenv("KEYCLOAK_CLIENT_ID", "admin-cli"),
+            realm_name=config.get("KEYCLOAK_REALM")
+            or getenv("KEYCLOAK_REALM", "master"),
+            client_secret_key=config.get("KEYCLOAK_CLIENT_SECRET")
+            or getenv("KEYCLOAK_CLIENT_SECRET"),
             verify=True,
         )
 
