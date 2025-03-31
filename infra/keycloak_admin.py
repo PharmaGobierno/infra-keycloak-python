@@ -5,15 +5,17 @@ from keycloak import KeycloakAdmin
 
 
 class KeycloakAdminService:
-    def __init__(self, config: dict = {}):
+    def __init__(self, config: dict = None):
+
+        config = config or {}
 
         self.admin = KeycloakAdmin(
             server_url=config.get("KEYCLOAK_URL") or getenv("KEYCLOAK_URL"),
-            username=config.get("ADMIN_USERNAME") or getenv("ADMIN_USERNAME"),
-            password=config.get("ADMIN_PASSWORD") or getenv("ADMIN_PASSWORD"),
-            realm_name=config.get("REALM_NAME") or getenv("REALM_NAME", "master"),
-            user_realm_name=config.get("ADMIN_REALM") or getenv("ADMIN_REALM"),
-            client_id=config.get("CLIENT_ID") or getenv("CLIENT_ID", "admin-cli"),
+            username=config.get("KEYCLOAK_ADMIN_USERNAME") or getenv("KEYCLOAK_ADMIN_USERNAME"),
+            password=config.get("KEYCLOAK_ADMIN_PASSWORD") or getenv("KEYCLOAK_ADMIN_PASSWORD"),
+            realm_name=config.get("KEYCLOAK_REALM") or getenv("KEYCLOAK_REALM", "master"),
+            user_realm_name=config.get("KEYCLOAK_ADMIN_REALM") or getenv("KEYCLOAK_ADMIN_REALM"),
+            client_id=config.get("KEYCLOAK_CLIENT_ID") or getenv("KEYCLOAK_CLIENT_ID", "admin-cli"),
             verify=True,
         )
 

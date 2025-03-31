@@ -4,7 +4,10 @@ from keycloak import KeycloakOpenID
 
 
 class KeycloakAuthService:
-    def __init__(self, config: dict = {}):
+    def __init__(self, config: dict = None):
+
+        config = config or {}
+        
         self.openid = KeycloakOpenID(
             server_url=config.get("KEYCLOAK_URL") or getenv("KEYCLOAK_URL"),
             client_id=config.get("KEYCLOAK_CLIENT_ID")
