@@ -1,13 +1,16 @@
 from os import getenv
+from typing import Optional
 
 from keycloak import KeycloakOpenID
+from keycloak.exceptions import KeycloakAuthenticationError
+
+from infra.exceptions import KeycloakTokenRefreshError
 
 
 class KeycloakAuthService:
-    def __init__(self, config: dict = None):
-
+    def __init__(self, config: Optional[dict] = None):
         config = config or {}
-        
+
         self.openid = KeycloakOpenID(
             server_url=config.get("KEYCLOAK_URL") or getenv("KEYCLOAK_URL"),
             client_id=config.get("KEYCLOAK_CLIENT_ID")
@@ -16,11 +19,14 @@ class KeycloakAuthService:
             or getenv("KEYCLOAK_REALM", "master"),
             client_secret_key=config.get("KEYCLOAK_CLIENT_SECRET")
             or getenv("KEYCLOAK_CLIENT_SECRET"),
-            verify=True,
+            verify=config.get("KEYCLOAK_VERIFY_SSL", True),
         )
 
     def login(self, username, password):
-        return self.openid.token(username, password)
+        try:
+            return self.openid.token(username, password)
+        except KeycloakAuthenticationError as e:
+            raise KeycloakTokenRefreshError(f"Authentication failed: {e}") from e
 
     def refresh_token(self, refresh_token):
         return self.openid.refresh_token(refresh_token)
