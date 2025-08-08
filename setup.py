@@ -3,9 +3,9 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-requirements_list = ["python-keycloak==3.9.1", "pytest==8.3.5", "pytest-mock==3.14.0"]
+requirements_list = ["python-keycloak==3.9.1"]
 
-LIB_NAME: str = "pharmagob-keycloak"
+LIB_NAME: str = "infra-keycloak-python"
 
 
 setuptools.setup(
@@ -26,5 +26,4 @@ setuptools.setup(
     classifiers=["Programming Language :: Python :: 3"],
     python_requires=">=3.11",
     zip_safe=True,
-    test_suite="tests",
 )
