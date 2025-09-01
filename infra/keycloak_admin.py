@@ -2,9 +2,12 @@ from os import getenv
 from typing import Any, Dict, List, Optional, cast
 
 from keycloak import KeycloakAdmin
-from keycloak.exceptions import KeycloakGetError
+from keycloak.exceptions import (
+   KeycloakOperationError,
+   KeycloakConnectionError as KeycloakLibConnectionError,
+)
 
-from infra.exceptions import KeycloakRoleAssignmentError, KeycloakUserCreationError
+from infra.exceptions import KeycloakRoleAssignmentError, KeycloakUserCreationError, KeycloakConnectionError, KeycloakUnavailableError
 
 
 class KeycloakAdminService:
@@ -29,7 +32,9 @@ class KeycloakAdminService:
     def create_user(self, user_data: Dict[str, Any]) -> str:
         try:
             return self.admin.create_user(user_data)
-        except KeycloakGetError as e:
+        except KeycloakLibConnectionError as e:
+            raise KeycloakUnavailableError(f"Keycloak server is not responding when creating user: {e}") from e
+        except KeycloakOperationError as e:
             raise KeycloakUserCreationError(f"Error creating user: {e}") from e
 
     def assign_role(self, user_id: str, role_name: str) -> None:
@@ -41,5 +46,7 @@ class KeycloakAdminService:
                 raise ValueError(f"Role '{role_name}' not found in realm.")
 
             self.admin.assign_realm_roles(user_id=user_id, roles=[role])
-        except KeycloakGetError as e:
+        except KeycloakLibConnectionError as e:
+            raise KeycloakUnavailableError(f"Keycloak server is not responding when assigning role: {e}") from e
+        except KeycloakOperationError as e:
             raise KeycloakRoleAssignmentError(f"Error assigning role: {e}") from e

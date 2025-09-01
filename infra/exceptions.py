@@ -7,6 +7,12 @@ class KeycloakError(Exception):
     pass
 
 
+class KeycloakConnectionError(KeycloakError):
+    """Errors related to connection issues with Keycloak server (timeout, network issues, server unavailable)."""
+
+    pass
+
+
 class KeycloakAdminError(KeycloakError):
     """Errors related to user or role management."""
 
@@ -33,5 +39,11 @@ class KeycloakRoleAssignmentError(KeycloakAdminError):
 
 class KeycloakTokenRefreshError(KeycloakAuthError):
     """Error refreshing token."""
+
+    pass
+
+
+class KeycloakUnavailableError(KeycloakConnectionError):
+    """Keycloak server is currently unavailable or not responding."""
 
     pass
